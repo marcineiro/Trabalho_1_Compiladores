@@ -11,6 +11,8 @@ package trabalho_1;
  */
 public class NewJFrame extends javax.swing.JFrame {
 
+    String saida = "", entrada = "";
+    int numChar;
     /**
      * Creates new form NewJFrame
      */
@@ -27,24 +29,24 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea2.setColumns(30);
-        jTextArea2.setRows(5);
-        jTextArea2.setTabSize(50);
-        jScrollPane2.setViewportView(jTextArea2);
-
         jTextArea1.setColumns(30);
-        jTextArea1.setRows(20);
+        jTextArea1.setRows(5);
         jTextArea1.setTabSize(50);
         jScrollPane1.setViewportView(jTextArea1);
+
+        jTextArea2.setColumns(30);
+        jTextArea2.setRows(20);
+        jTextArea2.setTabSize(50);
+        jScrollPane2.setViewportView(jTextArea2);
 
         jButton2.setText("Analisar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -68,21 +70,21 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(274, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1)))
+                    .addComponent(jScrollPane2)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -96,16 +98,8 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
-        String entrada = jTextArea1.getText().toString();
-        String saida = "";
-        int i =0;
-        int numChar=0;
-        for(i=0;i<entrada.length();i++){
-            if(entrada.charAt(i)!=' ')
-                numChar++;
-        }
-        saida ="Número de caracteres: " + numChar+"\n";
-        jTextArea2.setText(saida);
+        
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -146,6 +140,33 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+//    contar caracteres
+    public void contarCaracteres(boolean espacos){
+        int i;
+        numChar=0;
+        if(espacos){
+            numChar = entrada.length();
+            if(saida.isEmpty()){
+                saida ="Quantidade de caracteres (incluindo espaço): " + Integer.toString(numChar)+"\n";
+            } else {
+                saida +="\nQuantidade de caracteres (incluindo espaço): " + Integer.toString(numChar);
+            }
+        } else {
+            for(i=0;i<entrada.length();i++){
+                if(entrada.charAt(i)!=' ')
+                    numChar++;
+            }
+            if(saida.isEmpty()){
+                saida ="Quantidade de caracteres (sem considerar o espaço): " + Integer.toString(numChar)+"\n";
+            } else {
+                saida +="Quantidade de caracteres (sem considerar o espaço): " + Integer.toString(numChar);
+            }
+        }
+    }
+//    identificadores
+    
+//    indice
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

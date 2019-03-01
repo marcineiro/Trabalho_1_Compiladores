@@ -12,7 +12,7 @@ package trabalho_1;
 public class NewJFrame extends javax.swing.JFrame {
 
     String saida = "", entrada = "";
-    int numChar;
+    int numChar_sem_Esp, numChar_Esp;  //num caracter com e sem espaços
     /**
      * Creates new form NewJFrame
      */
@@ -144,28 +144,20 @@ public class NewJFrame extends javax.swing.JFrame {
 //    contar caracteres
     public void contarCaracteres(boolean espacos){
         int i;
-        numChar=0;
+        numChar_Esp=0;
+        
         if(espacos){
-            numChar = entrada.length();
-            if(saida.isEmpty()){
-                saida ="Quantidade de caracteres (incluindo espaço): " + Integer.toString(numChar)+"\n";
-            } else {
-                saida +="\nQuantidade de caracteres (incluindo espaço): " + Integer.toString(numChar);
-            }
+            numChar_Esp = entrada.length();
         } else {
             for(i=0;i<entrada.length();i++){
                 if(entrada.charAt(i)!=' ')
-                    numChar++;
-            }
-            if(saida.isEmpty()){
-                saida ="Quantidade de caracteres (sem considerar o espaço): " + Integer.toString(numChar)+"\n";
-            } else {
-                saida +="Quantidade de caracteres (sem considerar o espaço): " + Integer.toString(numChar);
+                    numChar_sem_Esp++;
             }
         }
     }
 //    identificadores
     
+//    palavras
 //    indice
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

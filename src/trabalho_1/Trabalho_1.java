@@ -15,10 +15,12 @@ public class Trabalho_1 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Main m = new Main();
-        javax.swing.JFrame w = new javax.swing.JFrame();
-        w.add(m);
-        w.setVisible(true);
+//        Main m = new Main();
+//        javax.swing.JFrame w = new javax.swing.JFrame();
+//        w.add(m);
+//        w.setVisible(true);
+        
+        new NewJFrame().setVisible(true);
     }
     
 }

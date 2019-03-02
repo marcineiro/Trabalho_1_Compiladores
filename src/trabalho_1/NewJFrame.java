@@ -5,6 +5,10 @@
  */
 package trabalho_1;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  *
  * @author Murilo Marcineiro
@@ -12,8 +16,9 @@ package trabalho_1;
 public class NewJFrame extends javax.swing.JFrame {
 
     String saida = "", entrada = "";
+    ArrayList<Identificador> ids = new ArrayList<>();
     int numChar_sem_Esp, numChar_Esp;  //num caracter com e sem espaços
-    int numPalavras;
+    int numPalavras,numIdentificadores,numLinhas;
     /**
      * Creates new form NewJFrame
      */
@@ -98,18 +103,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        entrada = jTextArea1.getText();
-        contarCaracteres(true);
-        contarCaracteres(false);
-        contarPalavras();
-        saida+=Integer.toString(numChar_Esp)+"\n";
-        saida+=Integer.toString(numChar_sem_Esp)+"\n";
-        saida+=Integer.toString(numPalavras)+"\n";
-        jTextArea2.setText(saida);
-        String in = tratarEntrada(true);
-        for(int i=0;i<in.length();i++){
-            System.out.println(in.charAt(i));
-        }
+        entrada=jTextArea1.getText().toUpperCase();
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -118,6 +112,9 @@ public class NewJFrame extends javax.swing.JFrame {
         numChar_Esp=0;
         numChar_sem_Esp=0;
         numPalavras=0;
+        numIdentificadores=0;
+        numLinhas=0;
+        ids.clear();
         saida="";
         jTextArea2.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -180,7 +177,51 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
 //    identificadores
-    
+    public void contarIdentificadores(){
+        char c;
+        String name = "";
+        Identificador id;
+        int i = 0;
+        boolean has;
+        while(i<entrada.length()){
+            c = entrada.charAt(i);
+            has = false;
+            while(c==' '&&i<entrada.length()){
+                i++;
+                c = entrada.charAt(i);
+            }
+            if((c>='a'&&c<='z')||(c>='A'&&c<='Z')){
+                while((c>='a'&&c<='z')||(c>='A'&&c<='Z'||(c>='0'&&c<='9'))){
+                    name+=c;
+                    i++;
+                    if(i<entrada.length()){
+                        c = entrada.charAt(i);
+                    } else {
+                        c = '\n';
+                    }
+                }
+                numIdentificadores++;
+                id = new Identificador(name);
+                id.setTimes(1);
+                if(!ids.isEmpty()){
+                    for (Identificador id1 : ids) {
+                        if (id1.getName().equals(name)) {
+                            has = true;
+                            id1.setTimes(id1.getTimes()+1);
+                        }
+                    }
+                    if(!has)
+                        ids.add(id);
+                } else {
+                    ids.add(id);
+                }
+                name = "";
+            }
+            if(c=='\n')
+                numLinhas++;
+            i++;
+        }
+    }
 //    palavras
     public void contarPalavras(){
         char c;
@@ -205,7 +246,63 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
 //    indice
+    public ArrayList<String> separarLinhas(){
+        ArrayList<String> linhas = new ArrayList<>();
+        int last=0;
+        String in = tratarEntrada(false);
+        for(int i=0;i<in.length();i++){
+            if(in.charAt(i)=='\n'){
+                linhas.add(in.substring(last, i));
+                last = i+1;
+            }
+        }
+        if(last<in.length())
+            linhas.add(in.substring(last));
+        return linhas;
+    }
+    
+    public void indiceId(){
+        int count;
+        String a[], a2[], line, name;
+        ArrayList<String> lines = separarLinhas();
+        ArrayList<Integer> timesA;
+        ArrayList<Integer> timesInLine;
+        for(int i=0;i<lines.size();i++){
+            for(Identificador id1 : ids){
+                name = id1.getName();
+                line = lines.get(i);
+                a = line.split(" ");
+                count = 0;
+                for(String a1 : a){
+                    if(a1.matches("\\w*\\(\\w*|\\w*\\)\\w*")){
+                        a2 = a1.split("\\(|\\)");
+                        for(String a3 : a2){
+                            if(name.equals(a3))
+                                count++;
+                        }
+                    } else {
+                        if(name.equals(a1))
+                            count++;
+                    }
+                }
+                if(count>0){
+                    if(id1.getLine()==null){
+                        timesA = new ArrayList<>();
+                        timesInLine = new ArrayList<>();
+                    } else {
+                        timesA = id1.getLine();
+                        timesInLine = id1.getTimesInLine();
+                    }
+                    timesA.add(i);
+                    timesInLine.add(count);
+                    id1.setLine(timesA);
+                    id1.setTimesInLine(timesInLine);
+                }
 
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

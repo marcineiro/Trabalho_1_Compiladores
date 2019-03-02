@@ -13,6 +13,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     String saida = "", entrada = "";
     int numChar_sem_Esp, numChar_Esp;  //num caracter com e sem espaços
+    int numPalavras;
     /**
      * Creates new form NewJFrame
      */
@@ -40,12 +41,12 @@ public class NewJFrame extends javax.swing.JFrame {
 
         jTextArea1.setColumns(30);
         jTextArea1.setRows(5);
-        jTextArea1.setTabSize(50);
+        jTextArea1.setTabSize(4);
         jScrollPane1.setViewportView(jTextArea1);
 
         jTextArea2.setColumns(30);
         jTextArea2.setRows(20);
-        jTextArea2.setTabSize(50);
+        jTextArea2.setTabSize(4);
         jScrollPane2.setViewportView(jTextArea2);
 
         jButton2.setText("Analisar");
@@ -97,13 +98,28 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
-        
+        entrada = jTextArea1.getText();
+        contarCaracteres(true);
+        contarCaracteres(false);
+        contarPalavras();
+        saida+=Integer.toString(numChar_Esp)+"\n";
+        saida+=Integer.toString(numChar_sem_Esp)+"\n";
+        saida+=Integer.toString(numPalavras)+"\n";
+        jTextArea2.setText(saida);
+        String in = tratarEntrada(true);
+        for(int i=0;i<in.length();i++){
+            System.out.println(in.charAt(i));
+        }
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        numChar_Esp=0;
+        numChar_sem_Esp=0;
+        numPalavras=0;
+        saida="";
+        jTextArea2.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -142,15 +158,23 @@ public class NewJFrame extends javax.swing.JFrame {
     }
     
 //    contar caracteres
+    public String tratarEntrada(boolean enter){
+        String nEntrada = entrada.replace("\t","");
+        if(enter)
+            nEntrada = nEntrada.replace("\n", " ");
+        return nEntrada;
+    }
+    
     public void contarCaracteres(boolean espacos){
         int i;
-        numChar_Esp=0;
-        
+        String in;
         if(espacos){
-            numChar_Esp = entrada.length();
+            in = tratarEntrada(false);
+            numChar_Esp = in.length();
         } else {
-            for(i=0;i<entrada.length();i++){
-                if(entrada.charAt(i)!=' ')
+            in = tratarEntrada(true);
+            for(i=0;i<in.length();i++){
+                if(in.charAt(i)!=' ')
                     numChar_sem_Esp++;
             }
         }
@@ -158,6 +182,28 @@ public class NewJFrame extends javax.swing.JFrame {
 //    identificadores
     
 //    palavras
+    public void contarPalavras(){
+        char c;
+        int i = 0;
+        while(i<entrada.length()){
+            c = entrada.charAt(i);
+            while(c==' '&&i<entrada.length()){
+                i++;
+                c = entrada.charAt(i);
+            }
+            while(c!=' '&&c!='\n'){
+                i++;
+                if(i<entrada.length()){
+                    c = entrada.charAt(i);
+                } else {
+                    c = '\n';
+                }
+                
+            }
+            i++;
+            numPalavras++;
+        }
+    }
 //    indice
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

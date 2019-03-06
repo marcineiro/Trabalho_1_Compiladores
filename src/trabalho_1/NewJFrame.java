@@ -5,9 +5,16 @@
  */
 package trabalho_1;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -17,8 +24,11 @@ public class NewJFrame extends javax.swing.JFrame {
 
     String saida = "", entrada = "";
     ArrayList<Identificador> ids = new ArrayList<>();
-    int numChar_sem_Esp, numChar_Esp;  //num caracter com e sem espaços
+    int numChar_sem_Esp, numChar_Esp;  //num caracter sem e com espaços
     int numPalavras,numIdentificadores,numLinhas;
+    int numerosReais =0;
+    int numerosInteiros=0;
+    int numeroOperadores=0;
     /**
      * Creates new form NewJFrame
      */
@@ -35,12 +45,16 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,6 +82,20 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
+        jMenu1.setText("File");
+
+        jMenuItem1.setText("Importar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,7 +118,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -104,6 +132,32 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         entrada=jTextArea1.getText().toUpperCase();
+        contarCaracteres(true);
+        contarCaracteres(false);
+        contarIdentificadores();
+        contarPalavras();
+        indiceId();
+        contaNumeros();
+        contaOperadores();
+        
+        jTextArea2.setText("Quantidade de caracteres (incluindo espaços): "+numChar_Esp+"\n");
+        jTextArea2.setText(jTextArea2.getText().toString()+"Quantidade de caracteres (sem espaços): "+numChar_sem_Esp+"\n");
+        jTextArea2.setText(jTextArea2.getText().toString()+"Quantidade de palavras: "+numPalavras+"\n");
+        jTextArea2.setText(jTextArea2.getText().toString()+"Quantiadade de identificadores: "+numIdentificadores+"\n");
+        jTextArea2.setText(jTextArea2.getText().toString()+"Quantidade de numeros inteiros: "+numerosInteiros+"\n");
+        jTextArea2.setText(jTextArea2.getText().toString()+"Quantidade de numeros reais: "+numerosReais+"\n\n");
+        
+        jTextArea2.setText(jTextArea2.getText().toString()+"Índice Alfabético: \n");
+        
+        for(Identificador mostraId: ids){
+            jTextArea2.setText(jTextArea2.getText().toString()+ mostraId.getName()+" ("+mostraId.getTimes()+"): ");
+            for(int i=0; i<mostraId.line.size();i++){
+                jTextArea2.setText(jTextArea2.getText().toString()+mostraId.line.get(i)+"("+mostraId.timesInLine.get(i)+") ");
+            }
+            jTextArea2.setText(jTextArea2.getText().toString()+"\n");
+        }
+        
+      
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -114,10 +168,36 @@ public class NewJFrame extends javax.swing.JFrame {
         numPalavras=0;
         numIdentificadores=0;
         numLinhas=0;
+        numerosInteiros=0;
+        numerosReais=0;
+        numeroOperadores=0;
         ids.clear();
         saida="";
         jTextArea2.setText("");
+        jTextArea1.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        File file = chooser.getSelectedFile();
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while((line=br.readLine())!=null){
+                jTextArea1.setText(jTextArea1.getText().toString()+line+"\n");
+            }
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -303,9 +383,55 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
+    public void contaNumeros(){
+        boolean conta=false;
+        String numero="";
+        String texto = jTextArea1.getText().toString();
+        String letra;
+        for(int i=0;i<texto.length();i++){
+            letra = ""+texto.charAt(i);
+            if(letra.matches("[0-9]") || letra.equals(".")){
+                numero = numero+letra;
+                conta = true;
+            }else{
+                if(conta){
+                    if(numero.matches("[0-9]+")){ 
+                        numerosInteiros++;
+                        numero="";
+                    }else {
+                        numerosReais++;
+                        numero="";
+                    } 
+                    conta=false;
+                    
+                }
+                
+            }
+        }
+        if(conta){
+            if(numero.matches("[0-9]+")) numerosInteiros++;
+            else {numerosReais++;}
+        }
+    }
+    
+    public void contaOperadores(){
+        String texto = jTextArea1.getText().toString();
+        String letra;
+        for(int i=0;i<texto.length();i++){
+            letra = ""+texto.charAt(i);
+            if(letra.equals("+")|| letra.equals("-") || letra.equals("/") || letra.equals("*") || letra.equals(">") || letra.equals("<") || letra.equals("=")){
+                numeroOperadores++;
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
